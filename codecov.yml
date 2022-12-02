@@ -1,0 +1,23 @@
+codecov:
+  notify:
+    after_n_builds: 3
+
+coverage:
+  fixes:
+  - "/usr/bin/keylime_agent::keylime/cmd/"
+  status:
+    project:
+      default:
+        informational: true
+
+comment:
+  layout: "flags,files"
+  behavior: default
+  require_changes: false
+  require_base: no
+  after_n_builds: 3
+
+flags:
+  testsuite:
+    carryforward: false
+

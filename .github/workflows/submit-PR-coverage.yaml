@@ -1,0 +1,28 @@
+name: PR code coverage measurement on codecov.io
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    name: Submit code coverage from Packit tests
+    defaults:
+      run:
+        working-directory: scripts
+    steps:
+    - uses: actions/checkout@v3
+    - name: Wait for Packit tests to finish and download rust_coverage.txt file
+      run: ./download_packit_coverage.sh
+      env:
+        MAX_DURATION: 5400
+        SLEEP_DELAY: 120
+    - name: List downloaded files
+      run: ls rust_coverage*
+    - name: Upload rust_coverage.txt report to Codecov with GitHub Action
+      uses: codecov/codecov-action@v2
+      with:
+        files: scripts/rust_coverage.txt
+        flags: testsuite
+
+
