@@ -170,4 +170,35 @@ mod tests {
         let test_mount = mount(&secure_dir_path, secure_size);
         assert!(check_mount(&secure_dir_path).is_ok());
     }
+
+    #[test]
+    fn test_dir_not_mounted(){
+        let path = "/var/lib/keylime";
+        let work_dir= Path::new(&path);
+        let secure_size = "1m";
+        assert!(check_mount(&work_dir).is_ok());
+    }
+
+    #[test]
+    fn test_mount_wrong_fs(){
+        let path = "/var/lib/keylime";
+        let work_dir= Path::new(&path);
+        let secure_size = "1m";
+        //mount with wrong fs
+        Command::new("mount")
+        .args([
+            "-t",
+            "ext4",
+            "-o",
+            format!("size={secure_size},mode=0700").as_str(),
+            "ext4",
+            work_dir.to_str().unwrap(),
+        ])
+        .output();
+        let test_mount = mount(&work_dir, secure_size);
+        assert!(check_mount(&work_dir).is_ok());
+    }
+
 }
+
+
